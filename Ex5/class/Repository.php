@@ -26,7 +26,7 @@ class Repository implements IRepository {
         $paramselements = array_fill(0, count($keys), '?');
         $paramsString = implode(',', $paramselements);
         $rep = $this->db->prepare("INSERT INTO {$this->tableName} ($keyString) VALUES ($paramsString);");
-        $rep->execute($params);
+        $rep->execute(array_values($params));
         $elements = $rep->fetchAll(PDO::FETCH_OBJ);
         return $elements;
     }
@@ -34,6 +34,13 @@ class Repository implements IRepository {
     public function delete($id) {
         $rep = $this->db->prepare("DELETE FROM {$this->tableName} WHERE id = :id");
         $rep->execute(["id"=>$id]);
+    }
+
+    public function find($condition) {
+        $rep = $this->db->prepare("SELECT * FROM {$this->tableName} WHERE {$condition};");
+        $rep->execute([]);
+        $elements = $rep->fetchAll(PDO::FETCH_OBJ);
+        return $elements;
     }
 
     public function keys() {
@@ -44,6 +51,40 @@ class Repository implements IRepository {
             $keys[] = $column['Field'];
         }
         return $keys;
+    }
+
+    public function showFilter($elements) {
+        ?>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <?php foreach($this->keys() as $key): ?>
+                        <th scope="col"><?= $key ?></th>
+                        <?php endforeach ?>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($elements as $index=>$element): ?>
+                    <tr>
+                        <th scope="row"><?= $index + 1 ?></th>
+                        <?php foreach($element as $val): ?>
+                        <td><?= $val ?></td>
+                        <?php endforeach ?>
+                        
+                        <td>
+                            <?php foreach($this->actions as $action=>$href): ?>
+                                <a href="<?= $href ?>">
+                                    <img src="<?= $action ?>" alt="Info Icon" width="30">
+                                </a>
+                            <?php endforeach ?>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php
     }
 
     public function show() {

@@ -29,3 +29,23 @@
 #canvas {
     background-color: black;
 }
+
+.left {
+    left: 0%;
+}
+
+.right {
+    right: 0%;
+}
+
+.top {
+    top: 0%;
+}
+
+.bottom {
+    bottom: 0%;
+}
+
+.inline-block {
+    display: inline-block;
+}

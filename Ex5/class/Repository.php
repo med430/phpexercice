@@ -76,7 +76,7 @@ class Repository implements IRepository {
                         <td>
                             <?php foreach($this->actions as $action=>$href): ?>
                                 <a href="<?= $href ?>">
-                                    <img src="<?= $action ?>" alt="Info Icon" width="30">
+                                    <img src="img/<?= $action ?>" alt="Info Icon" width="30">
                                 </a>
                             <?php endforeach ?>
                         </td>
@@ -109,9 +109,9 @@ class Repository implements IRepository {
                         <?php endforeach ?>
                         
                         <td>
-                            <?php foreach($this->actions as $action): ?>
-                                <a href="detailEtudiant.php?id=<?= $element->id ?>">
-                                    <img src="<?= $action ?>" alt="Info Icon" width="30">
+                            <?php foreach($this->actions as $action=>$href): ?>
+                                <a href="<?= $href ?>">
+                                    <img src="img/<?= $action ?>" alt="Info Icon" width="30">
                                 </a>
                             <?php endforeach ?>
                         </td>

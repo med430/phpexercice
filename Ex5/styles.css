@@ -1,0 +1,31 @@
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.x-centered {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.y-centered {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.x-y-centered {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.stdWidth {
+    width: 62.5%;
+}
+
+#canvas {
+    background-color: black;
+}

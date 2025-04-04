@@ -21,16 +21,24 @@ $etudiantsTable = new Etudiant();
             <?php endif ?>
         </div>
         <div class="container bg-light inline-block">
-            <button>Copy</button>
-            <button>Excel</button>
-            <button>csv</button>
-            <button>PDF</button>
             <div class="container relative right inline-block">
                 Search:
                 <input type="text" name="search">
             </div>
         </div>
     </form>
+    <a href="">
+        <button>Copy</button>
+    </a>
+    <a href="excelEtudiantExport.php">
+        <button>Excel</button>
+    </a>
+    <a href="csvEtudiantExport.php">
+        <button>csv</button>
+    </a>
+    <a href="pdfEtudiantExport.php">
+        <button>PDF</button>
+    </a>
     <?php
     if (isset($_GET["section"]) && $_GET["section"] === "") {
         unset($_GET["section"]);

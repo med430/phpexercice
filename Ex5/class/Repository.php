@@ -7,9 +7,9 @@ class Repository implements IRepository {
         $this->actions = [];
     }
 
-    public function findAll() {
+    public function findAll($fetchType = PDO::FETCH_OBJ) {
         $rep = $this->db->query("SELECT * FROM {$this->tableName};");
-        $elements = $rep->fetchAll(PDO::FETCH_OBJ);
+        $elements = $rep->fetchAll($fetchType);
         return $elements;
     }
 

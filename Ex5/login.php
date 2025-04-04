@@ -33,12 +33,12 @@ if(isset($_POST["user"]) && isset($_POST["password"])) {
                     <div class="col">
                         username or email :
                         <br>
-                        <input type="text" class="alert alert-light border border-primary" name="user" id="">
+                        <input type="text" class="alert alert-light border border-primary" name="user">
                     </div>
                     <div class="col">
                         password :
                         <br>
-                        <input type="text" class="alert alert-light border border-primary" name="password" id="">
+                        <input type="text" class="alert alert-light border border-primary" name="password">
                     </div>
                 </div>
                 <div class="row">

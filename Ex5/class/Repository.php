@@ -43,6 +43,23 @@ class Repository implements IRepository {
         return $elements;
     }
 
+    public function alter($params) {
+        $setString = "";
+        $a = [];
+        foreach($params as $key=>$value) {
+            $setString = $setString . $key . "=?";
+            $a[] = $value;
+            if(!($key === array_key_last($params))) {
+                $setString = $setString . ", ";
+            }
+        }
+        $a[] = $params["id"];
+        $rep = $this->db->prepare("UPDATE {$this->tableName} SET {$setString} WHERE id = ?;");
+        $rep->execute($a);
+        $elements = $rep->fetchAll(PDO::FETCH_OBJ);
+        return $elements;
+    }
+
     public function keys() {
         $stmt = $this->db->query("DESCRIBE {$this->tableName}");
         $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -53,7 +70,15 @@ class Repository implements IRepository {
         return $keys;
     }
 
-    public function showFilter($elements) {
+    public function vars($element) {
+        return [];
+    }
+
+    public function showElement($k, $v) {
+        echo $v;
+    }
+
+    public function showFilter($elements, $authority = "utilisateur") {
         ?>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -69,15 +94,17 @@ class Repository implements IRepository {
                     <?php foreach($elements as $index=>$element): ?>
                     <tr>
                         <th scope="row"><?= $index + 1 ?></th>
-                        <?php foreach($element as $val): ?>
-                        <td><?= $val ?></td>
+                        <?php foreach($element as $k=>$val): ?>
+                        <td><?php $this->showElement($k, $val) ?></td>
                         <?php endforeach ?>
                         
                         <td>
-                            <?php foreach($this->actions as $action=>$href): ?>
-                                <a href="<?= $href ?>">
-                                    <img src="img/<?= $action ?>" alt="Info Icon" width="30">
-                                </a>
+                            <?php foreach($this->actions as $action): ?>
+                                <?php if($action->isAccessibleAuthority($authority)): ?>
+                                    <a href="<?= $action->url($this->vars($element)) ?>">
+                                        <img src="img/<?= $action->imgUrl ?>" alt="<?= $action->actionName ?>" width="30">
+                                    </a>
+                                <?php endif ?>
                             <?php endforeach ?>
                         </td>
                     </tr>
@@ -87,38 +114,8 @@ class Repository implements IRepository {
         <?php
     }
 
-    public function show() {
+    public function show($authority = "utilisateur") {
         $elements = $this->findAll();
-        ?>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <?php foreach($this->keys() as $key): ?>
-                        <th scope="col"><?= $key ?></th>
-                        <?php endforeach ?>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($elements as $index=>$element): ?>
-                    <tr>
-                        <th scope="row"><?= $index + 1 ?></th>
-                        <?php foreach($element as $val): ?>
-                        <td><?= $val ?></td>
-                        <?php endforeach ?>
-                        
-                        <td>
-                            <?php foreach($this->actions as $action=>$href): ?>
-                                <a href="<?= $href ?>">
-                                    <img src="img/<?= $action ?>" alt="Info Icon" width="30">
-                                </a>
-                            <?php endforeach ?>
-                        </td>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        <?php
+        $this->showFilter($elements, $authority);
     }
 }

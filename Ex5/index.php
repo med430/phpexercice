@@ -14,9 +14,11 @@ $etudiantsTable = new Etudiant();
         <div class="container bg-light">
             <input type="text" placeholder="Veuillez renseignez votre section" name="section">
             <input type="submit" class="btn btn-danger" value="Filtrer">
-            <a href="">
-                <img src="img/ajouter-personne-icon.png" alt="ajouter étudiant" width="30">
-            </a>
+            <?php if($_SESSION["role"] === "Admin"): ?>
+                <a href="ajouterEtudiant.php">
+                    <img src="img/ajouter-personne-icon.png" alt="ajouter étudiant" width="30">
+                </a>
+            <?php endif ?>
         </div>
         <div class="container bg-light inline-block">
             <button>Copy</button>
@@ -34,13 +36,13 @@ $etudiantsTable = new Etudiant();
         unset($_GET["section"]);
     }
     if(!isset($_GET["section"]) && !isset($_GET["search"])) {
-        $etudiantsTable->show();
+        $etudiantsTable->show($_SESSION["role"]);
     } elseif(isset($_GET["section"]) && !isset($_GET["search"])) {
-        $etudiantsTable->showFilter($etudiantsTable->find("section = " . $_GET["section"]));
+        $etudiantsTable->showFilter($etudiantsTable->find("section = " . $_GET["section"]), $_SESSION["role"]);
     } elseif(!isset($_GET["section"]) && isset($_GET["search"])) {
-        $etudiantsTable->showFilter($etudiantsTable->find("name LIKE '%" . $_GET["search"] . "%' OR birthday LIKE '%" . $_GET["search"] . "%'"));
+        $etudiantsTable->showFilter($etudiantsTable->find("name LIKE '%" . $_GET["search"] . "%' OR birthday LIKE '%" . $_GET["search"] . "%'"), $_SESSION["role"]);
     } else {
-        $etudiantsTable->showFilter($etudiantsTable->find("section = " . $_GET["section"] . " AND (name LIKE '%" . $_GET["search"] . "%' OR birthday LIKE '%" . $_GET["search"] . "%')"));
+        $etudiantsTable->showFilter($etudiantsTable->find("section = " . $_GET["section"] . " AND (name LIKE '%" . $_GET["search"] . "%' OR birthday LIKE '%" . $_GET["search"] . "%')"), $_SESSION["role"]);
     }
     ?>
 </div>

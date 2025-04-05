@@ -74,8 +74,18 @@ class Repository implements IRepository {
         return [];
     }
 
+    public function pages(int $pageSize) {
+        $elementsSize = count($this->findAll());
+        return ceil($elementsSize / $pageSize);
+    }
+
     public function showElement($k, $v) {
         echo $v;
+    }
+
+    public function showFilterPage($elements, $page_size, $page = 0, $authority = "utilisateur") {
+        $offset = $page * $page_size;
+        $this->showFilter(array_slice($elements, $offset, $page_size), $authority);
     }
 
     public function showFilter($elements, $authority = "utilisateur") {
